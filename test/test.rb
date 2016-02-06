@@ -145,12 +145,14 @@ class MultipartBodyTest < Test::Unit::TestCase
       assert_equal 'content', part.encoded_body
     end
     
-    # TODO: Implement encoding tests
-    should "raise an exception when an encoding is passed" do
-      part = Part.new(:name => 'key', :body => 'content', :encoding => :base64)
-      assert_raises RuntimeError do
-        part.encoded_body
-      end
+    should "return a Content-Transfer-Encoding header set to binary if encoding set" do
+      part = Part.new(:name => 'key', :body => 'content', :encoding => :binary)
+      assert_match /content-transfer-encoding: binary/i, part.header
+    end
+
+    should "not return a Content-Transfer-Encoding header set to binary if encoding not set" do
+      part = Part.new(:name => 'key', :body => 'content')
+      assert_no_match /content-transfer-encoding: binary/i, part.header
     end
     
     should "output the header and body when sent #to_s" do

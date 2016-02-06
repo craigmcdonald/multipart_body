@@ -40,6 +40,8 @@ class Part < Struct.new(:name, :body, :filename, :content_disposition, :content_
     case encoding
     when nil
       body
+    when :binary
+      body
     else
       raise "Encodings have not been implemented"
     end
